@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout.Alignment;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,24 +38,49 @@ public class MainActivity extends Activity {
 		
 		RelativeLayout tmpRl = new RelativeLayout(this);
         
-        TextView tv = new TextView(this);
-        tv.setText("Test TextView");
-        tv.setGravity(10);;
-        tv.setBackgroundColor(Color.BLUE);
-        tv.setTextColor(ColorStateList.valueOf(Color.WHITE));
+        TextView tv1 = new TextView(this);
+        tv1.setText("A: facegreen");
+//        tv1.setGravity(10);
+        tv1.setBackgroundColor(Color.RED);
+        tv1.setTextColor(ColorStateList.valueOf(Color.WHITE));
         
-		Button bt = new Button(this);
-		bt.setText("Test Button");
+        TextView tv2 = new TextView(this);
+        tv2.setText("P: .........");
+//        tv2.setGravity(10);
+        tv2.setBackgroundColor(Color.BLUE);
+        tv2.setTextColor(ColorStateList.valueOf(Color.WHITE));
+        
+        TextView tv3 = new TextView(this);
+        tv3.setText("O: .........");
+//        tv2.setGravity(10);
+        tv3.setBackgroundColor(Color.GREEN);
+        tv3.setTextColor(ColorStateList.valueOf(Color.WHITE));
+        
+//		Button bt = new Button(this);
+//		bt.setText("Test Button");
 		
 //		ArrayList<View> viewList = new ArrayList<View>();
 //		viewList.add(bt);
 //		viewList.add(tv);
-		tmpRl.addView(tv, new RelativeLayout.LayoutParams(
+		
+		RelativeLayout.LayoutParams lp_tv1 = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT));
-		tmpRl.addView(bt, new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lp_tv1.setMargins(10, 300, 0, 0);
+		
+		RelativeLayout.LayoutParams lp_tv2 = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT));
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lp_tv2.setMargins(300, 100, 0, 0);
+		
+		RelativeLayout.LayoutParams lp_tv3 = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lp_tv3.setMargins(300, 500, 0, 0);
+		
+		tmpRl.addView(tv1, lp_tv1);
+		tmpRl.addView(tv2, lp_tv2);
+		tmpRl.addView(tv3, lp_tv3);
 
 		ZoomView zv = new ZoomView(this);
 		zv.setBackgroundColor(Color.LTGRAY);
@@ -64,6 +95,19 @@ public class MainActivity extends Activity {
 		RelativeLayout rl = (RelativeLayout) findViewById(R.id.ParentLayout);
 		rl.addView(zv, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Bitmap base_Bitmap = Bitmap.createBitmap(display.getWidth(), display.getHeight(),
+				Bitmap.Config.RGB_565);
+		Paint p = new Paint();
+		p.setColor(Color.YELLOW);
+		p.setStrokeWidth(5f);
+		Canvas canvas = new Canvas(base_Bitmap);
+		canvas.drawLine(170, 380, 320, 135, p);
+		canvas.drawLine(170, 380, 320, 605, p);
+		
+		Drawable drawable = new BitmapDrawable(base_Bitmap);
+		tmpRl.setBackground(drawable);
     }
 
 
