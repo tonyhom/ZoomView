@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -27,6 +28,10 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+	ZoomView zoomView;
+	LinkView lv1;
+	LinkView lv2;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +41,8 @@ public class MainActivity extends Activity {
 				LayoutParams.MATCH_PARENT);
 		lp.gravity = Gravity.LEFT | Gravity.TOP;
 		
-		RelativeLayout tmpRl = new RelativeLayout(this);
-        
+		final RelativeLayout tmpRl = new RelativeLayout(this);
+		
         TextView tv1 = new TextView(this);
         tv1.setText("A: facegreen");
 //        tv1.setGravity(10);
@@ -78,14 +83,40 @@ public class MainActivity extends Activity {
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		lp_tv3.setMargins(300, 500, 0, 0);
 		
+		lv1 = new LinkView(this, tv1, tv2);
+		lv1.setBackgroundColor(Color.TRANSPARENT);
+		
+		lv2 = new LinkView(this, tv1, tv3);
+		lv2.setBackgroundColor(Color.TRANSPARENT);
+		
+		OnClickListener onTextViewClickListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				v.setX(v.getX()+100);
+				zoomView.postInvalidate();
+				lv1.postInvalidate();
+				lv2.postInvalidate();
+				tmpRl.invalidate();
+				
+				
+			}
+		};
+        tv1.setOnClickListener(this.onTextViewClickListener);
+        tv2.setOnClickListener(this.onTextViewClickListener);
+        tv3.setOnClickListener(this.onTextViewClickListener);
+		
 		tmpRl.addView(tv1, lp_tv1);
 		tmpRl.addView(tv2, lp_tv2);
 		tmpRl.addView(tv3, lp_tv3);
+		tmpRl.addView(lv1);
+		tmpRl.addView(lv2);
 
-		ZoomView zv = new ZoomView(this);
-		zv.setBackgroundColor(Color.LTGRAY);
+		zoomView = new ZoomView(this);
+		zoomView.setBackgroundColor(Color.LTGRAY);
 		
-		zv.addView(tmpRl,lp);
+		zoomView.addView(tmpRl,lp);
 		
 //		((ViewGroup) zv).addView(tv, lp);
 		
@@ -93,22 +124,35 @@ public class MainActivity extends Activity {
 //		zv.addChildrenForAccessibility(viewList);
 
 		RelativeLayout rl = (RelativeLayout) findViewById(R.id.ParentLayout);
-		rl.addView(zv, new LayoutParams(LayoutParams.MATCH_PARENT,
+		rl.addView(zoomView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		
-		Display display = getWindowManager().getDefaultDisplay();
-		Bitmap base_Bitmap = Bitmap.createBitmap(display.getWidth(), display.getHeight(),
-				Bitmap.Config.RGB_565);
-		Paint p = new Paint();
-		p.setColor(Color.YELLOW);
-		p.setStrokeWidth(5f);
-		Canvas canvas = new Canvas(base_Bitmap);
-		canvas.drawLine(170, 380, 320, 135, p);
-		canvas.drawLine(170, 380, 320, 605, p);
+		/* Canvas.drawLine	*/
+//		Display display = getWindowManager().getDefaultDisplay();
+//		Bitmap base_Bitmap = Bitmap.createBitmap(display.getWidth(), display.getHeight(),
+//				Bitmap.Config.RGB_565);
+//		Paint p = new Paint();
+//		p.setColor(Color.YELLOW);
+//		p.setStrokeWidth(5f);
+//		Canvas canvas = new Canvas(base_Bitmap);
+//		canvas.drawLine(170, 380, 320, 135, p);
+//		canvas.drawLine(170, 380, 320, 605, p);
+//		
+//		Drawable drawable = new BitmapDrawable(base_Bitmap);
+//		tmpRl.setBackground(drawable);
 		
-		Drawable drawable = new BitmapDrawable(base_Bitmap);
-		tmpRl.setBackground(drawable);
+		
     }
+    
+    private OnClickListener onTextViewClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			v.setX(v.getX()+100);
+			zoomView.invalidate();
+		}
+	};
 
 
     @Override
