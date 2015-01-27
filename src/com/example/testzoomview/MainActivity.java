@@ -16,8 +16,10 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -29,8 +31,13 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 	ZoomView zoomView;
+	RelativeLayout rl;
 	LinkView lv1;
 	LinkView lv2;
+	
+	ViewGroup vg;
+	
+	float preX,preY;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,23 +102,33 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				v.setX(v.getX()+100);
-				zoomView.postInvalidate();
-				lv1.postInvalidate();
-				lv2.postInvalidate();
-				tmpRl.invalidate();
-				
+//				zoomView.postInvalidate();
+				for(int i = 0;i<tmpRl.getChildCount();i++){
+					tmpRl.getChildAt(i).invalidate();
+				}
+//				lv1.postInvalidate();
+//				lv2.postInvalidate();
+//				tmpRl.invalidate();
+//				vg.invalidate();
 				
 			}
 		};
-        tv1.setOnClickListener(this.onTextViewClickListener);
-        tv2.setOnClickListener(this.onTextViewClickListener);
-        tv3.setOnClickListener(this.onTextViewClickListener);
+		
+//        tv1.setOnClickListener(onTextViewClickListener);
+//        tv2.setOnClickListener(onTextViewClickListener);
+//        tv3.setOnClickListener(onTextViewClickListener);
+//        
+        tv1.setOnTouchListener(this.onTextViewOnTouchListener);
+        tv2.setOnTouchListener(this.onTextViewOnTouchListener);
+        tv3.setOnTouchListener(this.onTextViewOnTouchListener);
 		
 		tmpRl.addView(tv1, lp_tv1);
 		tmpRl.addView(tv2, lp_tv2);
 		tmpRl.addView(tv3, lp_tv3);
 		tmpRl.addView(lv1);
 		tmpRl.addView(lv2);
+		
+		vg = tmpRl;
 
 		zoomView = new ZoomView(this);
 		zoomView.setBackgroundColor(Color.LTGRAY);
@@ -123,7 +140,7 @@ public class MainActivity extends Activity {
 //		((ViewGroup) zv).addView(bt, lp);
 //		zv.addChildrenForAccessibility(viewList);
 
-		RelativeLayout rl = (RelativeLayout) findViewById(R.id.ParentLayout);
+		rl = (RelativeLayout) findViewById(R.id.ParentLayout);
 		rl.addView(zoomView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		
@@ -151,6 +168,39 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			v.setX(v.getX()+100);
 			zoomView.invalidate();
+			rl.invalidate();
+		}
+	};
+	
+	private OnTouchListener onTextViewOnTouchListener = new OnTouchListener() {
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			float mx = event.getX(); 
+			float my = event.getY();
+			
+			if(event.getAction() == MotionEvent.ACTION_DOWN){
+//				v.setX(v.getX()+mx);
+//				v.setY(v.getY()+my);
+				preX = event.getX();
+				preY = event.getY();
+				return true;
+			}
+			else if(event.getAction() == MotionEvent.ACTION_MOVE){
+				v.setX(v.getX()+(mx-preX));
+				v.setY(v.getY()+(my-preY));
+				return true;
+			}
+			else if(event.getAction() == MotionEvent.ACTION_UP){
+				v.invalidate();
+				for(int i = 0;i<vg.getChildCount();i++){
+					vg.getChildAt(i).invalidate();
+				}
+				return true;
+			}
+			
+			return false;
 		}
 	};
 
