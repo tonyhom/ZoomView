@@ -4,5 +4,10 @@
     <string name="app_name">TestZoomView</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="edit_hint">Click to input</string>
+    <string name="Save">Save</string>
+    <string name="Prev">Prev</string>
+    <string name="Discard">Discard</string>
+    <string name="Next">Next</string>
 
 </resources>

@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Layout.Alignment;
 import android.view.Display;
 import android.view.Gravity;
@@ -201,6 +202,16 @@ public class MainActivity extends Activity {
 			}
 			
 			return false;
+		}
+	};
+	
+	final Handler Hedit = new Handler();
+	Runnable mHedit = new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
 		}
 	};
 
